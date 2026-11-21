@@ -1,13 +1,10 @@
-
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
-const server = express();
-const PORT = process.env.PORT || 4000;
-
 dotenv.config();
+
+const server = express();
 
 const connectDB = require('./config/db');
 
@@ -45,7 +42,14 @@ server.use('/api', designRoutes);
 const siteSettingRoutes = require('./routes/siteSettingRoutes');
 server.use('/api', siteSettingRoutes);
 
-// Start Server
-server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Export for Vercel
+module.exports = server;
+
+// Local Development
+if (require.main === module) {
+    const PORT = process.env.PORT || 4000;
+
+    server.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
